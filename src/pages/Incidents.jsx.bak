@@ -1,0 +1,356 @@
+// src/pages/Incidents.jsx
+// Page complète pour la gestion des incidents
+
+import { useState, useEffect } from 'react';
+import { fetchIncidents, createIncident, updateIncident, deleteIncident } from '../services/api';
+import StatusBadge from '../components/ui/StatusBadge';
+import Modal from '../components/ui/Modal';
+
+const Incidents = () => {
+  const [incidents, setIncidents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all'); // all, pending, in_progress, completed
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingIncident, setEditingIncident] = useState(null);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const incidentsData = await fetchIncidents();
+      setIncidents(incidentsData);
+    } catch (error) {
+      console.error('Erreur:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateIncident = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    
+    try {
+      await createIncident({
+        severity: formData.get('severity'),
+        address: formData.get('address'),
+        patientInfo: {
+          name: formData.get('name'),
+          age: parseInt(formData.get('age')) || 0,
+          gender: formData.get('gender'),
+          condition: formData.get('condition')
+        },
+        latitude: 48.8566 + (Math.random() - 0.5) * 0.1,
+        longitude: 2.3522 + (Math.random() - 0.5) * 0.1
+      });
+      await loadData();
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Erreur création:', error);
+    }
+  };
+
+  const handleUpdateIncident = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    
+    try {
+      await updateIncident(editingIncident.id, {
+        severity: formData.get('severity'),
+        address: formData.get('address'),
+        patientInfo: {
+          name: formData.get('name'),
+          age: parseInt(formData.get('age')) || 0,
+          gender: formData.get('gender'),
+          condition: formData.get('condition')
+        }
+      });
+      await loadData();
+      setIsEditModalOpen(false);
+      setEditingIncident(null);
+    } catch (error) {
+      console.error('Erreur mise à jour:', error);
+    }
+  };
+
+  const handleDeleteIncident = async (incidentId) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cet incident ?')) {
+      return;
+    }
+    
+    try {
+      await deleteIncident(incidentId);
+      await loadData();
+    } catch (error) {
+      console.error('Erreur suppression:', error);
+    }
+  };
+
+  const filteredIncidents = incidents.filter(inc => {
+    if (filter === 'all') return true;
+    return inc.status === filter;
+  });
+
+  const getSeverityColor = (severity) => {
+    switch(severity) {
+      case 'critical': return 'red';
+      case 'medium': return 'orange';
+      case 'low': return 'yellow';
+      default: return 'gray';
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch(status) {
+      case 'pending': return 'En attente';
+      case 'in_progress': return 'En cours';
+      case 'completed': return 'Terminé';
+      default: return status;
+    }
+  };
+
+  if (loading) return <div className="loading">Chargement...</div>;
+
+  return (
+    <div className="incidents-page">
+      {/* En-tête */}
+      <div className="page-header">
+        <div>
+          <h1>🚨 Gestion des Incidents</h1>
+          <p className="text-muted">Total: {incidents.length} incidents</p>
+        </div>
+        <button className="btn-primary-custom" onClick={() => setIsModalOpen(true)}>
+          ➕ Nouvel Incident
+        </button>
+      </div>
+
+      {/* Filtres */}
+      <div className="filters">
+        <button 
+          className={filter === 'all' ? 'filter-btn active' : 'filter-btn'}
+          onClick={() => setFilter('all')}
+        >
+          Tous ({incidents.length})
+        </button>
+        <button 
+          className={filter === 'pending' ? 'filter-btn active' : 'filter-btn'}
+          onClick={() => setFilter('pending')}
+        >
+          En attente ({incidents.filter(i => i.status === 'pending').length})
+        </button>
+        <button 
+          className={filter === 'in_progress' ? 'filter-btn active' : 'filter-btn'}
+          onClick={() => setFilter('in_progress')}
+        >
+          En cours ({incidents.filter(i => i.status === 'in_progress').length})
+        </button>
+        <button 
+          className={filter === 'completed' ? 'filter-btn active' : 'filter-btn'}
+          onClick={() => setFilter('completed')}
+        >
+          Terminés ({incidents.filter(i => i.status === 'completed').length})
+        </button>
+      </div>
+
+      {/* Liste des incidents */}
+      <div className="incidents-grid">
+        {filteredIncidents.length === 0 ? (
+          <p className="text-center text-muted">Aucun incident trouvé</p>
+        ) : (
+          filteredIncidents.map(incident => (
+            <div 
+              key={incident.id} 
+              className={`incident-card ${incident.severity}`}
+            >
+              {/* En-tête carte */}
+              <div className="incident-card-header">
+                <div>
+                  <h3>{incident.id}</h3>
+                  <span className="incident-time">
+                    {new Date(incident.createdAt).toLocaleString('fr-FR')}
+                  </span>
+                </div>
+                <StatusBadge severity={incident.severity} />
+              </div>
+
+              {/* Informations */}
+              <div className="incident-card-body">
+                <div className="info-row">
+                  <i className="bi bi-geo-alt"></i>
+                  <span>{incident.address}</span>
+                </div>
+
+                {incident.patientInfo && (
+                  <>
+                    <div className="info-row">
+                      <i className="bi bi-person"></i>
+                      <span>{incident.patientInfo.name || 'Patient'}</span>
+                    </div>
+                    <div className="info-row">
+                      <i className="bi bi-heart-pulse"></i>
+                      <span>{incident.patientInfo.condition}</span>
+                    </div>
+                  </>
+                )}
+
+                <div className="info-row">
+                  <i className="bi bi-clock"></i>
+                  <span className="status-text">{getStatusText(incident.status)}</span>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="incident-card-footer">
+                <button 
+                  className="btn-edit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditingIncident(incident);
+                    setIsEditModalOpen(true);
+                  }}
+                >
+                  ✏️ Modifier
+                </button>
+                <button 
+                  className="btn-delete"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteIncident(incident.id);
+                  }}
+                >
+                  🗑️ Supprimer
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Modal Création Incident */
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Créer un Nouvel Incident"
+      >
+        <form onSubmit={handleCreateIncident} className="incident-form">
+          <div className="form-group">
+            <label>Gravité *</label>
+            <select name="severity" required>
+              <option value="low">Faible</option>
+              <option value="medium">Moyenne</option>
+              <option value="critical">Critique</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Adresse *</label>
+            <input type="text" name="address" placeholder="Adresse complète" required />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Nom du patient</label>
+              <input type="text" name="name" placeholder="Nom complet" />
+            </div>
+            <div className="form-group">
+              <label>Âge</label>
+              <input type="number" name="age" placeholder="Âge" />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Genre</label>
+            <select name="gender">
+              <option value="M">Homme</option>
+              <option value="F">Femme</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Condition / Description *</label>
+            <textarea name="condition" placeholder="Décrivez la situation..." rows={3} required></textarea>
+          </div>
+
+          <div className="form-actions">
+            <button type="button" className="btn-outline" onClick={() => setIsModalOpen(false)}>
+              Annuler
+            </button>
+            <button type="submit" className="btn-primary-custom">
+              Créer l'incident
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Modal Modification Incident */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setEditingIncident(null);
+        }}
+        title="Modifier l'Incident"
+      >
+        {editingIncident && (
+          <form onSubmit={handleUpdateIncident} className="incident-form">
+            <div className="form-group">
+              <label>Gravité *</label>
+              <select name="severity" defaultValue={editingIncident.severity} required>
+                <option value="low">Faible</option>
+                <option value="medium">Moyenne</option>
+                <option value="critical">Critique</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Adresse *</label>
+              <input type="text" name="address" defaultValue={editingIncident.address} placeholder="Adresse complète" required />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Nom du patient</label>
+                <input type="text" name="name" defaultValue={editingIncident.patientInfo?.name || ''} placeholder="Nom complet" />
+              </div>
+              <div className="form-group">
+                <label>Âge</label>
+                <input type="number" name="age" defaultValue={editingIncident.patientInfo?.age || ''} placeholder="Âge" />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Genre</label>
+              <select name="gender" defaultValue={editingIncident.patientInfo?.gender || 'M'}>
+                <option value="M">Homme</option>
+                <option value="F">Femme</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Condition / Description *</label>
+              <textarea name="condition" defaultValue={editingIncident.patientInfo?.condition || ''} placeholder="Décrivez la situation..." rows={3} required></textarea>
+            </div>
+
+            <div className="form-actions">
+              <button type="button" className="btn-outline" onClick={() => {
+                setIsEditModalOpen(false);
+                setEditingIncident(null);
+              }}>
+                Annuler
+              </button>
+              <button type="submit" className="btn-primary-custom">
+                Mettre à jour
+              </button>
+            </div>
+          </form>
+        )}
+      </Modal>
+    </div>
+  );
+};
+
+export default Incidents;

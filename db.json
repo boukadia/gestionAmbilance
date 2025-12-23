@@ -1,0 +1,272 @@
+{
+  "ambulances": [
+    {
+      "id": "AMB-001",
+      "callSign": "SAMU-75-01",
+      "status": "available",
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "lastUpdate": "2025-12-14T10:30:00Z",
+      "crew": {
+        "driver": "Hassan Alami",
+        "paramedic": "Fatima Benali"
+      },
+      "equipment": {
+        "defibrillator": true,
+        "oxygen": true,
+        "stretcher": true
+      }
+    },
+    {
+      "id": "AMB-002",
+      "callSign": "SAMU-75-02",
+      "status": "available",
+      "latitude": 48.8606,
+      "longitude": 2.3376,
+      "lastUpdate": "2025-12-14T10:25:00Z",
+      "currentIncidentId": "INC-001",
+      "crew": {
+        "driver": "Youssef Idrissi",
+        "paramedic": "Sarah Benjelloun"
+      },
+      "equipment": {
+        "defibrillator": true,
+        "oxygen": true,
+        "stretcher": true
+      }
+    },
+    {
+      "id": "AMB-003",
+      "callSign": "SAMU-75-03",
+      "status": "available",
+      "latitude": 48.8738,
+      "longitude": 2.295,
+      "lastUpdate": "2025-12-14T10:28:00Z",
+      "crew": {
+        "driver": "Mohammed Tahiri",
+        "paramedic": "Amina Chaoui"
+      },
+      "equipment": {
+        "defibrillator": true,
+        "oxygen": true,
+        "stretcher": true
+      }
+    },
+    {
+      "id": "AMB-004",
+      "callSign": "SAMU-75-04",
+      "status": "maintenance",
+      "latitude": 48.8534,
+      "longitude": 2.3488,
+      "lastUpdate": "2025-12-14T09:00:00Z",
+      "crew": {
+        "driver": "Mohammed Tahiri",
+        "paramedic": "Amina Chaoui"
+      },
+      "equipment": {
+        "defibrillator": true,
+        "oxygen": true,
+        "stretcher": true
+      }
+    }
+  ],
+  "incidents": [
+    {
+      "id": "INC-1765968573410",
+      "severity": "faible",
+      "address": "Fugit suscipit dese",
+      "patientInfo": {
+        "name": "charik",
+        "age": 54,
+        "gender": "M",
+        "condition": "Rerum magnam in quo "
+      },
+      "latitude": 48.89448703904526,
+      "longitude": 2.3577776100242893,
+      "createdAt": "2025-12-17T10:49:33.410Z",
+      "status": "completed",
+      "assignedAmbulanceId": "AMB-001",
+      "assignedAt": "2025-12-17T10:49:47.386Z"
+    },
+    {
+      "id": "INC-1765969158679",
+      "severity": "moyenne",
+      "address": "Reiciendis amet bea",
+      "patientInfo": {
+        "name": "Hannah Morton",
+        "age": 76,
+        "gender": "F",
+        "condition": "Nemo ea eum lorem am"
+      },
+      "latitude": 48.88931272449364,
+      "longitude": 2.302367782510763,
+      "createdAt": "2025-12-17T10:59:18.679Z",
+      "status": "completed",
+      "assignedAmbulanceId": "AMB-001",
+      "assignedAt": "2025-12-17T11:38:57.734Z"
+    },
+    {
+      "id": "INC-1765977078311",
+      "severity": "moyenne",
+      "address": "Magna vitae molestia",
+      "patientInfo": {
+        "name": "Serena Sharp",
+        "phone": "+1 (322) 356-9362",
+        "condition": "Non alias natus magn",
+        "age": 0,
+        "gender": "M"
+      },
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "createdAt": "2025-12-17T13:11:18.311Z",
+      "status": "completed",
+      "assignedAmbulanceId": "AMB-001",
+      "assignedAt": "2025-12-17T13:14:16.597Z"
+    },
+    {
+      "id": "INC-1765977090622",
+      "severity": "critique",
+      "address": "Laborum Cupiditate ",
+      "patientInfo": {
+        "name": "Blythe Hendrix",
+        "phone": "+1 (933) 706-9377",
+        "condition": "In voluptas rerum co",
+        "age": 0,
+        "gender": "M"
+      },
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "createdAt": "2025-12-17T13:11:30.622Z",
+      "status": "completed",
+      "assignedAmbulanceId": "AMB-001",
+      "assignedAt": "2025-12-17T13:11:45.038Z"
+    },
+    {
+      "id": "INC-1765977268134",
+      "severity": "moyenne",
+      "address": "Magni accusamus aspe",
+      "patientInfo": {
+        "name": "Kylan Briggs",
+        "phone": "+1 (397) 327-9369",
+        "condition": "Iusto quia at conseq",
+        "age": 0,
+        "gender": "M"
+      },
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "createdAt": "2025-12-17T13:14:28.134Z",
+      "status": "completed",
+      "assignedAmbulanceId": "AMB-002",
+      "assignedAt": "2025-12-17T13:14:40.325Z"
+    },
+    {
+      "id": "INC-1765977273973",
+      "severity": "faible",
+      "address": "Minima molestiae dol",
+      "patientInfo": {
+        "name": "Timothy Callahan",
+        "phone": "+1 (349) 115-9978",
+        "condition": "Omnis quia aperiam e",
+        "age": 0,
+        "gender": "M"
+      },
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "createdAt": "2025-12-17T13:14:33.973Z",
+      "status": "completed",
+      "assignedAmbulanceId": "AMB-001",
+      "assignedAt": "2025-12-17T13:14:36.821Z"
+    },
+    {
+      "id": "INC-1765977702511",
+      "severity": "faible",
+      "address": "Aut autem velit minu",
+      "patientInfo": {
+        "name": "Beatae qui dolorem e",
+        "age": 91,
+        "gender": "F",
+        "condition": "Quam culpa sit offic"
+      },
+      "latitude": 48.89786983823841,
+      "longitude": 2.334268339103688,
+      "createdAt": "2025-12-17T13:21:42.511Z",
+      "status": "pending",
+      "assignedAmbulanceId": null
+    },
+    {
+      "id": "INC-1765977958524",
+      "severity": "moyenne",
+      "address": "Rerum quia vel place",
+      "patientInfo": {
+        "name": "Dolorem dolor velit ",
+        "phone": "+1 (736) 756-7497",
+        "condition": "Reprehenderit saepe ",
+        "age": 0,
+        "gender": "M"
+      },
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "createdAt": "2025-12-17T13:25:58.524Z",
+      "status": "pending",
+      "assignedAmbulanceId": null
+    },
+    {
+      "id": "INC-1765978359550",
+      "severity": "moyenne",
+      "address": "Non minim ipsam aliq",
+      "patientInfo": {
+        "name": "Quasi illo explicabo",
+        "phone": "+1 (246) 899-6759",
+        "condition": "Neque iure sit debit",
+        "age": 0,
+        "gender": "M"
+      },
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "createdAt": "2025-12-17T13:32:39.550Z",
+      "status": "pending",
+      "assignedAmbulanceId": null
+    }
+  ],
+  "activities": [
+    {
+      "id": "ACT-001",
+      "type": "incident_created",
+      "description": "Nouvel incident crÃ©Ã©: Douleur thoracique",
+      "incidentId": null,
+      "timestamp": "2025-12-14T10:15:00Z",
+      "user": "OpÃ©rateur A"
+    },
+    {
+      "id": "ACT-002",
+      "type": "ambulance_assigned",
+      "description": "AMB-002 assignÃ©e Ã  INC-001",
+      "incidentId": null,
+      "ambulanceId": "AMB-002",
+      "timestamp": "2025-12-14T10:16:00Z",
+      "user": "OpÃ©rateur A"
+    },
+    {
+      "id": "ACT-003",
+      "type": "status_changed",
+      "description": "AMB-004 passÃ©e en maintenance",
+      "ambulanceId": "AMB-004",
+      "timestamp": "2025-12-14T09:00:00Z",
+      "user": "Chef de parc"
+    },
+    {
+      "id": "ACT-004",
+      "type": "incident_completed",
+      "description": "Incident INC-003 terminÃ©",
+      "incidentId": null,
+      "timestamp": "2025-12-14T10:05:00Z",
+      "user": "OpÃ©rateur B"
+    }
+  ],
+  "kpis": {
+    "availableAmbulances": 2,
+    "activeIncidents": 1,
+    "averageResponseTime": "4.5",
+    "completedToday": 3
+  }
+}
